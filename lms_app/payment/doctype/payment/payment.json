@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "P.######",
+ "creation": "2025-11-20 12:48:19.831636",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_8vht"
+ ],
+ "fields": [
+    {
+      "fieldname": "course",
+      "label": "Course",
+      "fieldtype": "Link",
+      "options": "Course"
+    },
+    {
+      "fieldname": "student",
+      "label": "Student",
+      "fieldtype": "Link",
+      "options": "User"
+    },
+    {
+      "fieldname": "amount",
+      "label": "Amount",
+      "fieldtype": "Currency"
+    },
+    {
+      "fieldname": "payment_status",
+      "label": "Payment Status",
+      "fieldtype": "Select",
+      "options": "Pending\nPaid\nFailed"
+    },
+    {
+      "fieldname": "payment_method",
+      "label": "Payment Method",
+      "fieldtype": "Select",
+      "options": "Card\nBank Transfer\nStripe"
+    },
+    {
+      "fieldname": "transaction_id",
+      "label": "Transaction ID",
+      "fieldtype": "Data"
+    },
+    {
+      "fieldname": "paid_on",
+      "label": "Paid On",
+      "fieldtype": "Datetime",
+      "default": "now"
+    }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-20 12:48:19.831636",
+ "modified_by": "Administrator",
+ "module": "Payment",
+ "name": "Payment",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

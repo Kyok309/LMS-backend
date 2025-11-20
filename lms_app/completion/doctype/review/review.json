@@ -1,0 +1,68 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "RW.####",
+ "creation": "2025-11-20 12:45:53.489056",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_s3fi"
+ ],
+ "fields": [
+    {
+      "fieldname": "course",
+      "label": "Course",
+      "fieldtype": "Link",
+      "options": "Course"
+    },
+    {
+      "fieldname": "student",
+      "label": "Student",
+      "fieldtype": "Link",
+      "options": "User"
+    },
+    {
+      "fieldname": "rating",
+      "label": "Rating",
+      "fieldtype": "Int"
+    },
+    {
+      "fieldname": "review_text",
+      "label": "Review",
+      "fieldtype": "Small Text"
+    },
+    {
+      "fieldname": "posted_on",
+      "label": "Posted On",
+      "fieldtype": "Datetime",
+      "default": "now"
+    }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-20 12:45:53.489056",
+ "modified_by": "Administrator",
+ "module": "Completion",
+ "name": "Review",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

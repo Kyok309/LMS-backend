@@ -1,0 +1,101 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "C.####",
+ "creation": "2025-11-20 12:15:15.941121",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_pzn0"
+ ],
+ "fields": [
+      {
+      "fieldname": "course_title",
+      "label": "Course Title",
+      "fieldtype": "Data",
+      "reqd": 1
+    },
+    {
+      "fieldname": "category",
+      "label": "Category",
+      "fieldtype": "Link",
+      "options": "Category"
+    },
+    {
+      "fieldname": "instructor",
+      "label": "Instructor",
+      "fieldtype": "Link",
+      "options": "User",
+      "depends_on": "eval:user_roles.includes('Instructor')"
+    },
+    {
+      "fieldname": "description",
+      "label": "Description",
+      "fieldtype": "Text Editor"
+    },
+    {
+      "fieldname": "thumbnail",
+      "label": "Thumbnail",
+      "fieldtype": "Attach Image"
+    },
+    {
+      "fieldname": "price_type",
+      "label": "Price Type",
+      "fieldtype": "Select",
+      "options": "Free\nPaid",
+      "default": "Free"
+    },
+    {
+      "fieldname": "price",
+      "label": "Price",
+      "fieldtype": "Currency",
+      "mandatory_depends_on": "eval:doc.price_type=='Paid'"
+    },
+    {
+      "fieldname": "level",
+      "label": "Level",
+      "fieldtype": "Select",
+      "options": "Beginner\nIntermediate\nAdvanced"
+    },
+    {
+      "fieldname": "status",
+      "label": "Status",
+      "fieldtype": "Select",
+      "options": "Draft\nPublished",
+      "default": "Draft"
+    },
+    {
+      "fieldname": "published_on",
+      "label": "Published On",
+      "fieldtype": "Date",
+      "read_only": 1
+    }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-20 12:15:15.941121",
+ "modified_by": "Administrator",
+ "module": "Course",
+ "name": "Course",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
