@@ -1,49 +1,38 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "SP.####",
- "creation": "2025-11-20 12:38:32.907353",
+ "autoname": "RT.######",
+ "creation": "2025-11-24 14:25:02.249220",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "user",
-  "school",
-  "education_level",
-  "total_enrollments"
+  "section_break_pme5"
  ],
  "fields": [
-  {
+{
    "fieldname": "user",
    "fieldtype": "Link",
    "label": "User",
    "options": "User"
   },
   {
-   "fieldname": "school",
+   "fieldname": "refresh_token",
    "fieldtype": "Data",
-   "label": "School"
+   "label": "Refresh Token"
   },
   {
-   "fieldname": "education_level",
-   "fieldtype": "Select",
-   "label": "Education Level",
-   "options": "High School\nBachelor\nMasters\nDoctor"
-  },
-  {
-   "fieldname": "total_enrollments",
-   "fieldtype": "Int",
-   "label": "Total Enrollments",
-   "read_only": 1
+   "fieldname": "expires_at",
+   "fieldtype": "Date",
+   "label": "Expires at"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-02 17:50:51.642934",
+ "modified": "2025-11-24 14:25:02.249220",
  "modified_by": "Administrator",
- "module": "User Learning",
- "name": "Student_profile",
- "naming_rule": "Expression (old style)",
+ "module": "Lms App",
+ "name": "Refresh_token",
  "owner": "Administrator",
  "permissions": [
   {

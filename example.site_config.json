@@ -1,0 +1,6 @@
+{
+    "jwt_secret": "lms345",
+    "jwt_algorithm": "HS256",
+    "jwt_access_expires": 900,
+    "jwt_refresh_days": 30
+}

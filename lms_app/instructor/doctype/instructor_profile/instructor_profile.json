@@ -6,52 +6,47 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_b25e"
+  "user",
+  "bio",
+  "expertise",
+  "qualification",
+  "total_courses",
+  "rating"
  ],
  "fields": [
-    {
-      "fieldname": "user",
-      "label": "User",
-      "fieldtype": "Link",
-      "options": "User"
-    },
-    {
-      "fieldname": "bio",
-      "label": "Bio",
-      "fieldtype": "Text Editor"
-    },
-    {
-      "fieldname": "expertise",
-      "label": "Expertise",
-      "fieldtype": "Data"
-    },
-    {
-      "fieldname": "qualification",
-      "label": "Qualification",
-      "fieldtype": "Text"
-    },
-    {
-      "fieldname": "profile_image",
-      "label": "Profile Image",
-      "fieldtype": "Attach Image"
-    },
-    {
-      "fieldname": "total_courses",
-      "label": "Total Courses",
-      "fieldtype": "Int",
-      "read_only": 1
-    },
-    {
-      "fieldname": "rating",
-      "label": "Rating",
-      "fieldtype": "Float",
-      "read_only": 1
-    }
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "fieldname": "expertise",
+   "fieldtype": "Data",
+   "label": "Expertise"
+  },
+  {
+   "fieldname": "qualification",
+   "fieldtype": "Text",
+   "label": "Qualification"
+  },
+  {
+   "fieldname": "total_courses",
+   "fieldtype": "Int",
+   "label": "Total Courses",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rating",
+   "fieldtype": "Float",
+   "label": "Rating",
+   "read_only": 1
+  }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-20 12:47:53.623150",
+ "modified": "2025-12-02 17:51:17.687333",
  "modified_by": "Administrator",
  "module": "Instructor",
  "name": "Instructor_profile",

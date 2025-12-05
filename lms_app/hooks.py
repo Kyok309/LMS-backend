@@ -5,6 +5,10 @@ app_description = "Online Learning"
 app_email = "kyok309xx@gmail.com"
 app_license = "mit"
 
+website_cors = [
+    "http://localhost:3000"
+]
+
 # Apps
 # ------------------
 

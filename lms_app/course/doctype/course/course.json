@@ -6,75 +6,88 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_pzn0"
+  "course_title",
+  "category",
+  "instructor",
+  "description",
+  "thumbnail",
+  "price_type",
+  "price",
+  "level",
+  "status",
+  "published_on"
  ],
  "fields": [
-      {
-      "fieldname": "course_title",
-      "label": "Course Title",
-      "fieldtype": "Data",
-      "reqd": 1
-    },
-    {
-      "fieldname": "category",
-      "label": "Category",
-      "fieldtype": "Link",
-      "options": "Category"
-    },
-    {
-      "fieldname": "instructor",
-      "label": "Instructor",
-      "fieldtype": "Link",
-      "options": "User",
-      "depends_on": "eval:user_roles.includes('Instructor')"
-    },
-    {
-      "fieldname": "description",
-      "label": "Description",
-      "fieldtype": "Text Editor"
-    },
-    {
-      "fieldname": "thumbnail",
-      "label": "Thumbnail",
-      "fieldtype": "Attach Image"
-    },
-    {
-      "fieldname": "price_type",
-      "label": "Price Type",
-      "fieldtype": "Select",
-      "options": "Free\nPaid",
-      "default": "Free"
-    },
-    {
-      "fieldname": "price",
-      "label": "Price",
-      "fieldtype": "Currency",
-      "mandatory_depends_on": "eval:doc.price_type=='Paid'"
-    },
-    {
-      "fieldname": "level",
-      "label": "Level",
-      "fieldtype": "Select",
-      "options": "Beginner\nIntermediate\nAdvanced"
-    },
-    {
-      "fieldname": "status",
-      "label": "Status",
-      "fieldtype": "Select",
-      "options": "Draft\nPublished",
-      "default": "Draft"
-    },
-    {
-      "fieldname": "published_on",
-      "label": "Published On",
-      "fieldtype": "Date",
-      "read_only": 1
-    }
+  {
+   "fieldname": "course_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Course Title",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "category",
+   "fieldtype": "Link",
+   "label": "Category",
+   "options": "Category"
+  },
+  {
+   "fieldname": "instructor",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Instructor",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Long Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "thumbnail",
+   "fieldtype": "Attach Image",
+   "label": "Thumbnail"
+  },
+  {
+   "default": "Free",
+   "fieldname": "price_type",
+   "fieldtype": "Select",
+   "label": "Price Type",
+   "options": "Free\nPaid"
+  },
+  {
+   "default": "0.0",
+   "depends_on": "eval:doc.price_type=='Paid'",
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price"
+  },
+  {
+   "fieldname": "level",
+   "fieldtype": "Select",
+   "label": "Level",
+   "options": "Beginner\nIntermediate\nAdvanced"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nPublished"
+  },
+  {
+   "fieldname": "published_on",
+   "fieldtype": "Date",
+   "label": "Published On",
+   "read_only": 1
+  }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-20 12:15:15.941121",
+ "modified": "2025-12-04 17:19:20.416220",
  "modified_by": "Administrator",
  "module": "Course",
  "name": "Course",
@@ -91,6 +104,37 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Student",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Instructor",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Guest",
+   "share": 1
   }
  ],
  "row_format": "Dynamic",
