@@ -3,7 +3,9 @@
 
 # import frappe
 from frappe.model.document import Document
-
+import frappe
 
 class Course(Document):
-	pass
+    def before_save(self):
+        if self.status == "Published":
+            self.published_on = frappe.utils.nowdate()

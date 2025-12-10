@@ -46,6 +46,21 @@
    "label": "Description"
   },
   {
+   "fieldname": "introduction",
+   "fieldtype": "Long Text",
+   "label": "Introduction"
+  },
+  {
+   "fieldname": "learning_curve",
+   "fieldtype": "Long Text",
+   "label": "Learning Curve"
+  },
+  {
+   "fieldname": "requirement",
+   "fieldtype": "Text",
+   "label": "Requirement"
+  },
+  {
    "fieldname": "thumbnail",
    "fieldtype": "Attach Image",
    "label": "Thumbnail"
