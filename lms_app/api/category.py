@@ -6,7 +6,7 @@ def get_categories():
     try:
         categories = frappe.db.get_list("Category", filters={'is_active': 1}, fields=["name", "category_name"])
         response_maker(
-            desc="Successfully fetched categories.",
+            desc="Ангилалын мэдээллийг амжилттай авлаа.",
             data=categories
         )
         return

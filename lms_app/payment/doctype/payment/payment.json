@@ -39,8 +39,8 @@
       "options": "Card\nBank Transfer\nStripe"
     },
     {
-      "fieldname": "transaction_id",
-      "label": "Transaction ID",
+      "fieldname": "stripe_payment_id",
+      "label": "Stripe Payment ID",
       "fieldtype": "Data"
     },
     {

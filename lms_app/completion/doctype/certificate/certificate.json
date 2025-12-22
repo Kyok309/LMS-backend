@@ -22,16 +22,10 @@
       "options": "User"
     },
     {
-      "fieldname": "certificate_id",
-      "label": "Certificate ID",
-      "fieldtype": "Data",
-      "unique": 1
-    },
-    {
-      "fieldname": "issued_on",
-      "label": "Issued On",
-      "fieldtype": "Date",
-      "default": "now"
+      "fieldname": "enrollment",
+      "label": "Enrollment",
+      "fieldtype": "Link",
+      "options": "Enrollment"
     }
  ],
  "grid_page_length": 50,

@@ -1,9 +1,9 @@
 import frappe
-def response_maker(desc="success", status=200, type="ok", data=None, meta=None, code=None):
+def response_maker(desc="success", status=200, type="ok", data=None, meta=None):
     try:
         frappe.response["desc"] = desc
         frappe.response["http_status_code"] = status
-        frappe.response["responseCode"] = code
+        frappe.response["responseCode"] = status
         frappe.response["responseType"] = type
         
         if data:

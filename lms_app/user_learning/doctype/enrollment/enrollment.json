@@ -29,21 +29,23 @@
       "depends_on": "eval:doc.course_price_type=='Paid'"
     },
     {
-      "fieldname": "enrolled_on",
-      "label": "Enrolled On",
-      "fieldtype": "Datetime",
-      "default": "now"
-    },
-    {
       "fieldname": "progress_percentage",
       "label": "Progress (%)",
-      "fieldtype": "Float"
+      "fieldtype": "Float",
+      "default": 0.0
+    },
+    {
+      "fieldname": "average_score",
+      "label": "Average Score",
+      "fieldtype": "Float",
+      "default": 0.0
     },
     {
       "fieldname": "completion_status",
       "label": "Completion Status",
       "fieldtype": "Select",
-      "options": "Not started\nIn Progress\nFinished"
+      "options": "Not started\nIn Progress\nFinished",
+      "default": "Not started"
     }
  ],
  "grid_page_length": 50,

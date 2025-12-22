@@ -29,12 +29,6 @@
       "fieldname": "is_read",
       "label": "Is Read",
       "fieldtype": "Check"
-    },
-    {
-      "fieldname": "created_on",
-      "label": "Created On",
-      "fieldtype": "Datetime",
-      "default": "now"
     }
  ],
  "grid_page_length": 50,

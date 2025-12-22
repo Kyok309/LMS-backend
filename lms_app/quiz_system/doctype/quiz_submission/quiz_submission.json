@@ -22,12 +22,6 @@
       "options": "User"
     },
     {
-      "fieldname": "submitted_on",
-      "label": "Submitted On",
-      "fieldtype": "Datetime",
-      "default": "now"
-    },
-    {
       "fieldname": "score",
       "label": "Score",
       "fieldtype": "Int"

@@ -42,7 +42,7 @@ def get_courses():
         filtered_courses = frappe.db.get_all(
             "Course",
             filters=filters,
-            fields="*",
+            fields=["name", "course_title", "category", "instructor", "description", "introduction", "learning_curve", "requirement", "thumbnail", "price_type", "price", "level", "published_on", "creation"],
             order_by=order_by,
             or_filters=[
                 ["Course", "course_title", "like", query],
@@ -52,14 +52,29 @@ def get_courses():
             start=offset,
             page_length=per_page
         )
+
+        filtered_courses_instructor_ids = [c["instructor"] for c in filtered_courses]
+        instructors = frappe.db.get_all(
+            "User",
+            filters={"name": ["in", filtered_courses_instructor_ids]},
+            fields=["name", "full_name", "user_image"]
+        )
+        instructors_map = {i["name"]: i for i in instructors}
+
+        filtered_courses_category_ids = [c["category"] for c in filtered_courses]
+        categories = frappe.db.get_all(
+            "Category",
+            filters={"name": ["in", filtered_courses_category_ids]},
+            fields=["name", "category_name"]
+        )
+        categories_map = {cat["name"]: cat for cat in categories}
         
         courses = []
         
         for course in filtered_courses:
-            
             instructor_id = course.get("instructor")
             if instructor_id:
-                full_name, user_image = frappe.get_value("User", instructor_id, ["full_name", "user_image"])
+                full_name, user_image = instructors_map.get(instructor_id, {}).get("full_name"), instructors_map.get(instructor_id, {}).get("user_image")
                 course["instructor_full_name"] = full_name
                 course["instructor_image"] = user_image
             else:
@@ -68,11 +83,11 @@ def get_courses():
             
             category_id = course.get("category")
             if category_id:
-                category_name = frappe.get_value("Category", category_id, "category_name")
+                category_name = categories_map.get(category_id, {}).get("category_name")
                 course["category_name"] = category_name
             else:
                 course["category_name"] = None
-            
+
             student_count = frappe.db.count("Enrollment", {"course": course.get("name")})
             course["student_count"] = student_count
             lesson_count = frappe.db.count("Lesson", {"course": course.get("name")})
@@ -91,7 +106,6 @@ def get_courses():
             fields=["name"]
         ))
         total_pages = (total_count + per_page - 1) // per_page if total_count > 0 else 1
-        
         
         response_maker(
             desc="Амжилттай",
@@ -119,20 +133,31 @@ def get_courses():
 def get_courses_instructor():
     try:
         user = frappe.session.user
+        if not frappe.db.exists("Has Role", {"parent": user, "role": "Instructor"}):
+            response_maker(
+                desc="Сургалтын мэдээлэлд хандах эрхгүй байна.",
+                status=403,
+                type="error",
+            )
+            return
         level = frappe.request.args.get("level")
         category = frappe.request.args.get("category")
         sort_by = frappe.request.args.get("sort_by", "creation_desc")
         search_query = frappe.request.args.get("search", "")
         page = frappe.request.args.get("page", 1, type=int)
+        status = frappe.request.args.get("status", "All")
 
-        field, direction = sort_by.rsplit("_", 1)
-        order_by = f"{field} {direction}"
+        filters={"instructor": user}
 
-        filters={"status": "Published", "instructor": user}
         if level and level != "All":
             filters["level"] = level
         if category and category != "All":
             filters["category"] = category
+        if status and status != "All":
+            filters["status"] = status
+
+        field, direction = sort_by.rsplit("_", 1)
+        order_by = f"{field} {direction}"
 
         query = "%{}%".format(search_query)
 
@@ -152,12 +177,20 @@ def get_courses_instructor():
             page_length=per_page
         )
         
+        filtered_courses_category_ids = [c["category"] for c in filtered_courses]
+        categories = frappe.db.get_all(
+            "Category",
+            filters={"name": ["in", filtered_courses_category_ids]},
+            fields=["name", "category_name"]
+        )
+        categories_map = {cat["name"]: cat for cat in categories}
+
         courses = []
 
         for course in filtered_courses:
             category_id = course.get("category")
             if category_id:
-                course["category_name"] = frappe.get_value("Category", category_id, "category_name")
+                course["category_name"] = categories_map.get(category_id, {}).get("category_name")
             else:
                 course["category_name"] = None
 
@@ -204,22 +237,27 @@ def get_courses_instructor():
 @frappe.whitelist(allow_guest=True, methods=["GET"])
 def get_course():
     try:
-        id = frappe.form_dict.get("id")
-        print(id)
-        course = frappe.get_doc("Course", id)
-        instructor = frappe.get_doc("User", course.instructor)
-        instructor_name = instructor.full_name
-        instructor_image = instructor.user_image
-        category = frappe.get_value("Category", course.category, "category_name")
-        total_students = frappe.db.count("Enrollment", {"course": course.name})
+        courseId = frappe.form_dict.get("courseId")
+        course = frappe.get_value(
+            "Course", courseId,
+            ["name", "course_title", "category", "instructor", "description", "introduction", "learning_curve", "requirement", "thumbnail", "price_type", "price", "level", "published_on", "creation"],
+            as_dict=1
+        )
         print(course)
-        print(instructor)
-        print(category)
-        data = course.as_dict()
-        data["instructor_name"] = instructor_name
+        
+        instructor_full_name, instructor_image = frappe.get_value("User", course["instructor"], ["full_name", "user_image"])
+        if frappe.session.user:
+            is_enrolled = frappe.db.exists("Enrollment", {"course": courseId, "student": frappe.session.user})
+            print(is_enrolled)
+            print("User" + frappe.session.user)
+        else:
+            is_enrolled = False
+        data = course
+        data["instructor_name"] = instructor_full_name
         data["instructor_image"] = instructor_image
-        data["category_name"] = category
-        data["total_students"] = total_students
+        data["category_name"] = frappe.get_value("Category", course["category"], "category_name")
+        data["total_students"] = frappe.db.count("Enrollment", {"course": course["name"]})
+        data["is_enrolled"] = bool(is_enrolled)
         response_maker(
             desc="Амжилттай",
             data = data
@@ -234,23 +272,95 @@ def get_course():
             status=500
         )
         return
+    
+@frappe.whitelist(methods=["GET"])
+def get_course_instructor():
+    try:
+        user = frappe.session.user
+        if not frappe.db.exists("Has Role", {"parent": user, "role": "Instructor"}):
+            response_maker(
+                desc="Сургалтын мэдээлэлд хандах эрхгүй байна.",
+                status=403,
+                type="error",
+            )
+            return
+        id = frappe.form_dict.get("id")
+        if not id:
+            response_maker(
+                desc="Сургалтын ID байхгүй байна.",
+                status=400,
+                type="error"
+            )
+        course = frappe.get_doc("Course", id)
+        if not course:
+            response_maker(
+                desc="Сургалт олдсонгүй.",
+                status=404,
+                type="error"
+            )
+            return
+        if user == course.instructor:
+            data = course.as_dict()
+            data["category_name"] = frappe.get_value("Category", course.category, "category_name")
+            data["total_students"] = frappe.db.count("Enrollment", {"course": course.name})
+            response_maker(
+                desc="Амжилттай",
+                data = data
+            )
+            return
+        else:
+            response_maker(
+                desc="Сургалтын мэдээлэлд хандах эрхгүй байна.",
+                type="error",
+                status=403
+            )
+            return
+    except:
+        frappe.log_error(frappe.get_traceback(), "Get courses error")
+        print(frappe.get_traceback())
+        response_maker(
+            desc="Сургалтын мэдээлэл авахад алдаа гарлаа.",
+            type="error",
+            status=500
+        )
+        return
 
 @frappe.whitelist(methods=["POST"])
 def create_course():
     try:
+        user = frappe.session.user
+        if not frappe.db.exists("Has Role", {"parent": user, "role": "Instructor"}):
+            response_maker(
+                desc="Сургалт бүртгэх эрхгүй байна.",
+                status=403,
+                type="error",
+            )
+            return
+        
         data = frappe.request.get_json() or {}
-        print(data)
+
         instructor = data.get("instructor")
+        if not user == instructor:
+            response_maker(
+                desc="Сургалт бүртгэх эрхгүй байна.",
+                status=403,
+                type="error",
+            )
+            return
+        
         course_title = data.get("course_title")
         category = data.get("category")
-        description = data.get("description")
+        level = data.get("level")
         thumbnail = data.get("thumbnail")
+        description = data.get("description")
+        introduction = data.get("introduction")
+        learning_curve = data.get("learning_curve")
+        requirement = data.get("requirement")
         price_type = data.get("price_type")
         price = data.get("price")
-        level = data.get("level")
         status = data.get("status")
 
-        if not all([instructor, course_title, category, price_type, level]):
+        if not all([course_title, category, instructor, price_type, level, status]):
             response_maker(
                 desc="Бүх талбарыг бөглөнө үү.",
                 status=400,
@@ -261,22 +371,26 @@ def create_course():
         existing_course = frappe.db.exists("Course", {"course_title": course_title})
         
         if existing_course:
-            return response_maker(
+            response_maker(
                 desc="Ижил нэртэй сургалт бүртгэгдсэн байна.",
                 status=409,
                 type="error",
             )
+            return
 
         course = frappe.get_doc({
             "doctype": "Course",
             "instructor": instructor,
             "course_title": course_title,
             "category": category,
-            "description": description,
+            "level": level,
             "thumbnail": thumbnail,
+            "description": description,
+            "introduction": introduction,
+            "learning_curve": learning_curve,
+            "requirement": requirement,
             "price_type": price_type,
             "price": price,
-            "level": level,
             "status": status
         })
         course.flags.ignore_mandatory = True
@@ -285,7 +399,8 @@ def create_course():
 
         response_maker(
             desc="Сургалт амжилттай бүртгэгдлээ.",
-            status=201
+            status=201,
+            data=course
         )
         return
     except:
@@ -298,30 +413,47 @@ def create_course():
         print(frappe.get_traceback())
         return
     
-@frappe.whitelist(allow_guest=False, methods=["PUT"])
+@frappe.whitelist(methods=["PUT"])
 def update_course():
     try:
-        data = frappe.request.request.get_json() or {}
-        course = frappe.get_doc("Course", {"name": data.get("courseId")})
+        data = frappe.request.get_json() or {}
         user = frappe.session.user
-        if user.name == course.instructor:
+
+        if not data.get("courseId"):
+            response_maker(
+                desc="Сургалтын ID байхгүй байна.",
+                status=400,
+                type="error"
+            )
+            return
+        course = frappe.get_doc("Course", data.get("courseId"))
+        if not course:
+            response_maker(
+                desc="Сургалт олдсонгүй.",
+                status=404,
+                type="error"
+            )
+            return
+        if user == course.instructor:
             for field, value in data.items():
                 if field == "courseId":
                     continue
-                if field in course.as_dict(): 
-                    setattr(course, field, value)
+                if hasattr(course, field): 
+                    course.set(field, value)
 
             course.save()
             response_maker(
                 desc="Амжилттай засагдлаа.",
                 status=201
             )
+            return
         else:
             response_maker(
                 desc="Сургалт засах эрхгүй байна.",
-                status=401,
+                status=403,
                 type="error"
             )
+            return
     except:
         response_maker(
             desc="Сургалт засахад алдаа гарлаа.",
@@ -331,29 +463,42 @@ def update_course():
         frappe.log_error(frappe.get_traceback(), "Create Course Error")
         print(frappe.get_traceback())
         return
-    return 
 
 
 @frappe.whitelist(methods=["DELETE"])
 def delete_course():
-    try:
-        id = frappe.request.args.get("id")
-        if not id:
-            response_maker(
-                desc="Сургалтын ID байхгүй байна.",
-                status=404,
-                type="error"
-            )
-        if not frappe.db.exists("Course", id):
-            return response_maker(
-                desc="Сургалт олдсонгүй.",
-                status=404,
-                type="error"
-            )
-        frappe.delete_doc("Course", id)
+    user = frappe.session.user
+
+    courseId = frappe.request.args.get("courseId")
+    if not courseId:
         response_maker(
-            desc="Сургалт амжилттай устгагдлаа."
+            desc="Сургалтын ID байхгүй байна.",
+            status=400,
+            type="error"
         )
+        return
+    course = frappe.get_doc("Course", courseId)
+    if not course:
+        response_maker(
+            desc="Сургалт олдсонгүй.",
+            status=404,
+            type="error"
+        )
+        return
+    try:
+        if course.instructor == user:
+            frappe.delete_doc("Course", courseId)
+            response_maker(
+                desc="Сургалт амжилттай устгагдлаа."
+            )
+            return
+        else:
+            response_maker(
+                desc="Сургалт устгах эрхгүй байна.",
+                status=403,
+                type="error"
+            )
+            return
     except Exception as e:
         print(frappe.get_traceback())
         response_maker(
