@@ -8,14 +8,14 @@ def get_instructor_profile():
         instructor = frappe.get_value(
             "Instructor_profile",
             {"user": user},
-            ["expertise", "qualification", "total_courses", "rating"],
+            ["name", "profession", "expertise", "qualification", "experience", "total_courses", "rating"],
             as_dict=True
         )
         print(instructor)
         instructor_user = frappe.get_value(
             "User",
             user,
-            ["first_name", "last_name", "phone", "user_image"],
+            ["email", "first_name", "last_name", "phone", "user_image", "bio"],
             as_dict=True
         )
         print(instructor_user)
@@ -59,7 +59,8 @@ def update_instructor_profile():
         
         for field, value in data.items():
             if hasattr(instructor, field):
-                instructor.set(field, value)
+                if field != "name":
+                    instructor.set(field, value)
             elif hasattr(instructor_user, field):
                 instructor_user.set(field, value)
         instructor.save()

@@ -1,9 +1,9 @@
-# Copyright (c) 2025, urtaa and contributors
+# Copyright (c) 2026, urtaa and contributors
 # For license information, please see license.txt
 
 # import frappe
 from frappe.model.document import Document
 
 
-class Refresh_token(Document):
+class Student_answer(Document):
 	pass

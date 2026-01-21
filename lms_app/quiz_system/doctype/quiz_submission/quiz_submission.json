@@ -6,39 +6,57 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_m8wp"
+  "quiz",
+  "student",
+  "score",
+  "student_answers",
+  "passed",
+  "score_percent"
  ],
  "fields": [
-    {
-      "fieldname": "quiz",
-      "label": "Quiz",
-      "fieldtype": "Link",
-      "options": "Quiz"
-    },
-    {
-      "fieldname": "student",
-      "label": "Student",
-      "fieldtype": "Link",
-      "options": "User"
-    },
-    {
-      "fieldname": "score",
-      "label": "Score",
-      "fieldtype": "Int"
-    },
-    {
-      "fieldname": "answers_json",
-      "label": "Answers JSON",
-      "fieldtype": "JSON"
-    }
+  {
+   "fieldname": "quiz",
+   "fieldtype": "Link",
+   "label": "Quiz",
+   "options": "Quiz"
+  },
+  {
+   "fieldname": "student",
+   "fieldtype": "Link",
+   "label": "Student",
+   "options": "User"
+  },
+  {
+   "fieldname": "score",
+   "fieldtype": "Int",
+   "label": "Score"
+  },
+  {
+   "fieldname": "student_answers",
+   "fieldtype": "Table",
+   "label": "Student Answers",
+   "options": "Student_answer"
+  },
+  {
+   "default": "0",
+   "fieldname": "passed",
+   "fieldtype": "Check",
+   "label": "Passed"
+  },
+  {
+   "fieldname": "score_percent",
+   "fieldtype": "Percent",
+   "label": "Score Percent"
+  }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-20 12:44:25.362660",
+ "modified": "2026-01-16 19:56:10.366510",
  "modified_by": "Administrator",
  "module": "Quiz System",
  "name": "Quiz_submission",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -50,6 +68,27 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Instructor",
+   "share": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Student",
    "share": 1,
    "write": 1
   }

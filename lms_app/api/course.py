@@ -240,16 +240,13 @@ def get_course():
         courseId = frappe.form_dict.get("courseId")
         course = frappe.get_value(
             "Course", courseId,
-            ["name", "course_title", "category", "instructor", "description", "introduction", "learning_curve", "requirement", "thumbnail", "price_type", "price", "level", "published_on", "creation"],
+            ["name", "course_title", "category", "instructor", "description", "introduction", "learning_curve", "requirement", "thumbnail", "price_type", "price", "level", "rating", "published_on", "creation"],
             as_dict=1
         )
-        print(course)
         
         instructor_full_name, instructor_image = frappe.get_value("User", course["instructor"], ["full_name", "user_image"])
         if frappe.session.user:
             is_enrolled = frappe.db.exists("Enrollment", {"course": courseId, "student": frappe.session.user})
-            print(is_enrolled)
-            print("User" + frappe.session.user)
         else:
             is_enrolled = False
         data = course
@@ -358,9 +355,8 @@ def create_course():
         requirement = data.get("requirement")
         price_type = data.get("price_type")
         price = data.get("price")
-        status = data.get("status")
 
-        if not all([course_title, category, instructor, price_type, level, status]):
+        if not all([course_title, category, instructor, price_type, level]):
             response_maker(
                 desc="Бүх талбарыг бөглөнө үү.",
                 status=400,
@@ -390,8 +386,7 @@ def create_course():
             "learning_curve": learning_curve,
             "requirement": requirement,
             "price_type": price_type,
-            "price": price,
-            "status": status
+            "price": price
         })
         course.flags.ignore_mandatory = True
 
@@ -427,20 +422,27 @@ def update_course():
             )
             return
         course = frappe.get_doc("Course", data.get("courseId"))
-        if not course:
-            response_maker(
-                desc="Сургалт олдсонгүй.",
-                status=404,
-                type="error"
-            )
-            return
-        if user == course.instructor:
-            for field, value in data.items():
-                if field == "courseId":
-                    continue
-                if hasattr(course, field): 
-                    course.set(field, value)
+        
+        ALLOWED_FIELDS = {
+            "course_title",
+            "category",
+            "level",
+            "thumbnail",
+            "description",
+            "introduction",
+            "learning_curve",
+            "requirement",
+            "price_type",
+            "price",
+            "status"
+        }
 
+        if user == course.instructor:
+            update_data = {
+                k: v for k, v in data.items()
+                if k in ALLOWED_FIELDS
+            }
+            course.update(update_data)
             course.save()
             response_maker(
                 desc="Амжилттай засагдлаа.",
@@ -454,6 +456,13 @@ def update_course():
                 type="error"
             )
             return
+    except frappe.DoesNotExistError:
+        response_maker(
+            desc="Сургалт олдсонгүй.",
+            status=404,
+            type="error"
+        )
+        return
     except:
         response_maker(
             desc="Сургалт засахад алдаа гарлаа.",
@@ -477,17 +486,17 @@ def delete_course():
             type="error"
         )
         return
-    course = frappe.get_doc("Course", courseId)
-    if not course:
+    if frappe.db.exists("Enrollment", {"course": courseId}):
         response_maker(
-            desc="Сургалт олдсонгүй.",
-            status=404,
+            desc="Сургалтанд суралцагчид бүртгэлтэй тул сургалт устгах боломжгүй байна.",
+            status=400,
             type="error"
         )
         return
     try:
+        course = frappe.get_doc("Course", courseId)
+        course.delete()
         if course.instructor == user:
-            frappe.delete_doc("Course", courseId)
             response_maker(
                 desc="Сургалт амжилттай устгагдлаа."
             )
@@ -499,6 +508,13 @@ def delete_course():
                 type="error"
             )
             return
+    except frappe.DoesNotExistError:
+        response_maker(
+            desc="Сургалт олдсонгүй.",
+            status=404,
+            type="error"
+        )
+        return
     except Exception as e:
         print(frappe.get_traceback())
         response_maker(

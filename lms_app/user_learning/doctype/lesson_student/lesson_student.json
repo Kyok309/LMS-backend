@@ -1,22 +1,23 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "RW.####",
- "creation": "2025-11-20 12:45:53.489056",
+ "autoname": "LS.####",
+ "creation": "2026-01-15 23:44:55.405025",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "course",
+  "lesson",
   "student",
-  "rating",
-  "review_text"
+  "status",
+  "final_score",
+  "amended_from"
  ],
  "fields": [
   {
-   "fieldname": "course",
+   "fieldname": "lesson",
    "fieldtype": "Link",
-   "label": "Course",
-   "options": "Course"
+   "label": "Lesson",
+   "options": "Lesson"
   },
   {
    "fieldname": "student",
@@ -25,23 +26,37 @@
    "options": "User"
   },
   {
-   "fieldname": "rating",
-   "fieldtype": "Int",
-   "label": "Rating"
+   "default": "Open",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Done\nOpen"
   },
   {
-   "fieldname": "review_text",
-   "fieldtype": "Small Text",
-   "label": "Review"
+   "default": "0",
+   "fieldname": "final_score",
+   "fieldtype": "Percent",
+   "label": "Final Score",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Lesson_student",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-15 16:18:46.717349",
+ "modified": "2026-01-19 17:03:28.351537",
  "modified_by": "Administrator",
- "module": "Completion",
- "name": "Review",
+ "module": "User Learning",
+ "name": "Lesson_student",
  "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
@@ -56,27 +71,6 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
-  },
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Student",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Instructor",
-   "share": 1
   }
  ],
  "row_format": "Dynamic",

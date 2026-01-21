@@ -141,3 +141,32 @@ def stripe_webhook():
         frappe.db.commit()
 
     return "ok"
+
+@frappe.whitelist(methods=["GET"])
+def get_stripe_account_status():
+    try:
+        stripe.api_key = frappe.conf.stripe_secret_key
+        user = frappe.session.user
+        instructor = frappe.get_doc("Instructor_profile", {"user": user})
+        if not instructor.connected_account_id:
+            response_maker(
+                desc="Stripe хаяг холбогдоогүй байна.",
+                status=404,
+                type="error"
+            )
+            return
+        account = stripe.Account.retrieve(instructor.connected_account_id)
+        response_maker(
+            desc="Stripe account status retrieved successfully.",
+            data={"charges_enabled": account.charges_enabled,
+                "account_id": account.id}
+        )
+        return
+    except Exception as e:
+        print(frappe.get_traceback())
+        response_maker(
+            desc=str(e),
+            status=500,
+            type="error"
+        )
+        return

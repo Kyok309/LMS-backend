@@ -59,3 +59,54 @@ def get_payments_student():
             status=500,
             type="error"
         )
+
+@frappe.whitelist(methods=["GET"])
+def get_payments_instructor():
+    user = frappe.session.user
+    if not frappe.db.exists("Has Role", {"parent": user, "role": "Instructor"}):
+        response_maker(
+            desc="Төлбөрийн мэдээлэлд хандах эрхгүй байна.",
+            status=403,
+            type="error"
+        )
+        return
+    
+    try:
+        from frappe.query_builder import DocType
+        from frappe.query_builder.functions import Count
+        Student = DocType("User")
+        Course = DocType("Course")
+        Payment = DocType("Payment")
+        
+        payments = (
+            frappe.qb
+            .from_(Payment)
+            .join(Student)
+            .on(Payment.student == Student.name)
+            .join(Course)
+            .on(Payment.course == Course.name)
+            .select(
+                Payment.course, Payment.amount, Payment.payment_status, Payment.payment_method, Payment.paid_on, Course.name, Course.course_title, Student.full_name, Student.email
+            )
+            .where(
+                Course.instructor == user
+            )
+        ).run(as_dict = True)
+
+        total_sum = sum(p["amount"] for p in payments if p["payment_status"] == "Paid")
+        data={
+            "payments": payments,
+            "total_paid_amount": total_sum
+        }
+        response_maker(
+            desc="Төлбөрийн мэдээллийг амжилттай авлаа.",
+            data=data
+        )
+        return
+    except:
+        print(frappe.get_traceback())
+        response_maker(
+            desc="Төлбөрийн мэдээллийг авахад алдаа гарлаа.",
+            status=500,
+            type="error"
+        )

@@ -6,52 +6,64 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_yhzr"
+  "course",
+  "student",
+  "payment",
+  "progress_percentage",
+  "average_score",
+  "completion_status",
+  "completed_lessons"
  ],
  "fields": [
-    {
-      "fieldname": "course",
-      "label": "Course",
-      "fieldtype": "Link",
-      "options": "Course"
-    },
-    {
-      "fieldname": "student",
-      "label": "Student",
-      "fieldtype": "Link",
-      "options": "User"
-    },
-    {
-      "fieldname": "payment",
-      "label": "Payment",
-      "fieldtype": "Link",
-      "options": "Payment",
-      "depends_on": "eval:doc.course_price_type=='Paid'"
-    },
-    {
-      "fieldname": "progress_percentage",
-      "label": "Progress (%)",
-      "fieldtype": "Float",
-      "default": 0.0
-    },
-    {
-      "fieldname": "average_score",
-      "label": "Average Score",
-      "fieldtype": "Float",
-      "default": 0.0
-    },
-    {
-      "fieldname": "completion_status",
-      "label": "Completion Status",
-      "fieldtype": "Select",
-      "options": "Not started\nIn Progress\nFinished",
-      "default": "Not started"
-    }
+  {
+   "fieldname": "course",
+   "fieldtype": "Link",
+   "label": "Course",
+   "options": "Course"
+  },
+  {
+   "fieldname": "student",
+   "fieldtype": "Link",
+   "label": "Student",
+   "options": "User"
+  },
+  {
+   "depends_on": "eval:doc.course_price_type=='Paid'",
+   "fieldname": "payment",
+   "fieldtype": "Link",
+   "label": "Payment",
+   "options": "Payment"
+  },
+  {
+   "default": "0",
+   "fieldname": "progress_percentage",
+   "fieldtype": "Float",
+   "label": "Progress (%)"
+  },
+  {
+   "default": "0",
+   "fieldname": "average_score",
+   "fieldtype": "Float",
+   "label": "Average Score"
+  },
+  {
+   "default": "Not started",
+   "fieldname": "completion_status",
+   "fieldtype": "Select",
+   "label": "Completion Status",
+   "options": "Not started\nIn Progress\nFinished"
+  },
+  {
+   "default": "0",
+   "fieldname": "completed_lessons",
+   "fieldtype": "Int",
+   "label": "Completed Lessons"
+  }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-20 12:32:05.997719",
+ "modified": "2026-01-16 14:52:27.438477",
  "modified_by": "Administrator",
  "module": "User Learning",
  "name": "Enrollment",
@@ -66,6 +78,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Student",
    "share": 1,
    "write": 1
   }

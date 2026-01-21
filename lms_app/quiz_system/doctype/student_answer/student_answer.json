@@ -1,35 +1,36 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "QA.#####",
- "creation": "2025-11-20 12:44:08.820986",
+ "creation": "2026-01-14 16:52:36.027473",
  "doctype": "DocType",
+ "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "answer_text",
-  "is_correct"
+  "quiz_question",
+  "quiz_question_answer"
  ],
  "fields": [
   {
-   "fieldname": "answer_text",
-   "fieldtype": "Data",
-   "label": "Answer Text"
+   "fieldname": "quiz_question",
+   "fieldtype": "Link",
+   "label": "Quiz Question",
+   "options": "Quiz_question"
   },
   {
-   "default": "0",
-   "fieldname": "is_correct",
-   "fieldtype": "Check",
-   "label": "Is Correct"
+   "fieldname": "quiz_question_answer",
+   "fieldtype": "Link",
+   "label": "Quiz Question Answer",
+   "options": "Quiz_question_answer"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-01-05 14:50:12.505820",
+ "modified": "2026-01-14 16:54:53.438284",
  "modified_by": "Administrator",
  "module": "Quiz System",
- "name": "Quiz_question_answer",
+ "name": "Student_answer",
  "owner": "Administrator",
  "permissions": [],
  "row_format": "Dynamic",

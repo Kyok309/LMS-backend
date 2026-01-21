@@ -7,55 +7,55 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "section_break_qrif"
+  "content_type",
+  "video_url",
+  "text_content",
+  "attachment",
+  "external_link",
+  "order"
  ],
  "fields": [
-    {
-      "fieldname": "content_type",
-      "label": "Content Type",
-      "fieldtype": "Select",
-      "options": "Video\nText\nFile\nLink"
-    },
-    {
-      "fieldname": "video_url",
-      "label": "Video URL",
-      "fieldtype": "Data",
-      "depends_on": "eval:doc.content_type=='Video'"
-    },
-    {
-      "fieldname": "text_content",
-      "label": "Text Content",
-      "fieldtype": "Text Editor",
-      "depends_on": "eval:doc.content_type=='Text'"
-    },
-    {
-      "fieldname": "attachment",
-      "label": "Attachment",
-      "fieldtype": "Attach",
-      "depends_on": "eval:doc.content_type=='File'"
-    },
-    {
-      "fieldname": "external_link",
-      "label": "External Link",
-      "fieldtype": "Data",
-      "depends_on": "eval:doc.content_type=='Link'"
-    },
-    {
-      "fieldname": "duration_minutes",
-      "label": "Duration (Minutes)",
-      "fieldtype": "Float"
-    },
-    {
-      "fieldname": "order",
-      "label": "Order",
-      "fieldtype": "Int"
-    }
+  {
+   "fieldname": "content_type",
+   "fieldtype": "Select",
+   "label": "Content Type",
+   "options": "Video\nText\nFile\nLink"
+  },
+  {
+   "depends_on": "eval:doc.content_type=='Video'",
+   "fieldname": "video_url",
+   "fieldtype": "Attach",
+   "label": "Video URL"
+  },
+  {
+   "depends_on": "eval:doc.content_type=='Text'",
+   "fieldname": "text_content",
+   "fieldtype": "Long Text",
+   "label": "Text Content"
+  },
+  {
+   "depends_on": "eval:doc.content_type=='File'",
+   "fieldname": "attachment",
+   "fieldtype": "Attach",
+   "label": "Attachment"
+  },
+  {
+   "depends_on": "eval:doc.content_type=='Link'",
+   "fieldname": "external_link",
+   "fieldtype": "Data",
+   "label": "External Link"
+  },
+  {
+   "fieldname": "order",
+   "fieldtype": "Int",
+   "label": "Order"
+  }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-11-20 12:26:56.755445",
+ "modified": "2025-12-26 14:53:55.525353",
  "modified_by": "Administrator",
  "module": "Course",
  "name": "Lesson_content",

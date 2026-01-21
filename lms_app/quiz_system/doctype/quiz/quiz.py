@@ -3,7 +3,19 @@
 
 # import frappe
 from frappe.model.document import Document
+import frappe
 
 
 class Quiz(Document):
-	pass
+	def on_trash(self):
+		self.delete_quiz_questions()
+
+	def delete_quiz_questions(self):
+		questions = frappe.get_all(
+			"Quiz Question",
+			filters={"quiz": self.name},
+			pluck="name"
+		)
+
+		for question in questions:
+			frappe.delete_doc("Quiz Question", question, force=1)

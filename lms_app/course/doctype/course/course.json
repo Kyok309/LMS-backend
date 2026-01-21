@@ -18,7 +18,8 @@
   "price_type",
   "price",
   "status",
-  "published_on"
+  "published_on",
+  "rating"
  ],
  "fields": [
   {
@@ -106,17 +107,17 @@
    "read_only": 1
   },
   {
+   "default": "0",
    "fieldname": "rating",
    "fieldtype": "Float",
    "label": "Rating",
-   "read_only": 1,
-   "default": 0.0
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-12-11 20:44:19.465645",
+ "modified": "2026-01-14 15:57:09.241332",
  "modified_by": "Administrator",
  "module": "Course",
  "name": "Course",
@@ -136,7 +137,6 @@
    "write": 1
   },
   {
-   "delete": 1,
    "email": 1,
    "export": 1,
    "print": 1,

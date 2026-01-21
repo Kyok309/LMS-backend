@@ -6,44 +6,49 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_obzi"
+  "course",
+  "lesson_title",
+  "order",
+  "description",
+  "lesson_content"
  ],
  "fields": [
   {
-      "fieldname": "course",
-      "label": "Course",
-      "fieldtype": "Link",
-      "options": "Course"
-    },
-    {
-      "fieldname": "lesson_title",
-      "label": "Lesson Title",
-      "fieldtype": "Data"
-    },
-    {
-      "fieldname": "order",
-      "label": "Order",
-      "fieldtype": "Int"
-    },
-    {
-      "fieldname": "description",
-      "label": "Description",
-      "fieldtype": "Small Text"
-    },
-    {
-      "fieldname": "lesson_content",
-      "label": "Lesson Content",
-      "fieldtype": "Table",
-      "options": "Lesson_content"
-    }
+   "fieldname": "course",
+   "fieldtype": "Link",
+   "label": "Course",
+   "options": "Course"
+  },
+  {
+   "fieldname": "lesson_title",
+   "fieldtype": "Data",
+   "label": "Lesson Title"
+  },
+  {
+   "fieldname": "order",
+   "fieldtype": "Int",
+   "label": "Order"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "lesson_content",
+   "fieldtype": "Table",
+   "label": "Lesson Content",
+   "options": "Lesson_content"
+  }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-20 12:24:13.704849",
+ "modified": "2026-01-15 23:43:54.161496",
  "modified_by": "Administrator",
  "module": "Course",
  "name": "Lesson",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -55,6 +60,18 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Instructor",
    "share": 1,
    "write": 1
   }

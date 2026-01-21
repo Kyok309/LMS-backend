@@ -1,4 +1,4 @@
-# Copyright (c) 2025, urtaa and Contributors
+# Copyright (c) 2026, urtaa and Contributors
 # See license.txt
 
 # import frappe
@@ -13,9 +13,9 @@ IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 
 
-class IntegrationTestRefresh_token(IntegrationTestCase):
+class IntegrationTestLesson_student(IntegrationTestCase):
 	"""
-	Integration tests for Refresh_token.
+	Integration tests for Lesson_student.
 	Use this class for testing interactions between multiple components.
 	"""
 

@@ -1,5 +1,6 @@
 import frappe
 from lms_app.utils.utils import response_maker
+from frappe.auth import check_password
 import requests
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
@@ -161,4 +162,49 @@ def login():
             type="error",
         )
         frappe.log_error(frappe.get_traceback(), "Login Error")
+        return
+    
+    
+@frappe.whitelist(methods=["POST"])
+def change_password(old_password, new_password):
+    try:
+        user = frappe.session.user
+        if not user or user == "Guest":
+            response_maker(
+                desc="Нууц үг солих эрхгүй хэрэглэгч байна.",
+                status=403,
+                type="error"
+            )
+            return
+        if old_password == new_password:
+            response_maker(
+                desc="Шинэ нууц үг хуучин нууц үгтэй ижил байна.",
+                status=400,
+                type="error"
+            )
+            return
+
+        user_doc = frappe.get_doc("User", user)
+        check_password(user, old_password)
+        user_doc.new_password = new_password
+        user_doc.save()
+        response_maker(
+            desc="Нууц үг амжилттай солигдлоо."
+        )
+        return
+    except frappe.AuthenticationError:
+        response_maker(
+            desc="Хуучин нууц үг буруу байна.",
+            status=400,
+            type="error"
+        )
+        return
+    except Exception as e:
+        print(frappe.get_traceback())
+        response_maker(
+            desc=str(e),
+            status=500,
+            type="error"
+        )
+        frappe.log_error(frappe.get_traceback(), "Change Password Error")
         return
