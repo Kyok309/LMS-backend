@@ -1,6 +1,7 @@
 import frappe
 from lms_app.utils.utils import response_maker
 from lms_app.api.enrollment import check_enrollment
+from frappe.query_builder import DocType
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])
 def get_reviews_course(courseId = None):
@@ -34,6 +35,36 @@ def get_reviews_course(courseId = None):
         )
         return
     
+@frappe.whitelist(methods=["GET"])
+def get_reviews_instructor(instructorId = None):
+    try:
+        Review = DocType("Review")
+        Course = DocType("Course")
+        User = DocType("User")
+        reviews = (frappe.qb
+            .from_(Review)
+            .join(Course)
+            .on(Course.name == Review.course)
+            .join(User)
+            .on(User.name == Review.student)
+            .select(Review.rating, Review.review_text, Review.creation, Course.course_title, User.full_name, User.email, User.user_image)
+            .where(Course.instructor == instructorId)
+        ).run(as_dict=1)
+        response_maker(
+            desc="Үнэлгээний жагсаалт амжилттай авлаа.",
+            data=reviews
+        )
+        return
+    except:
+        frappe.log_error(frappe.get_traceback(), "Get reviews instructor error")
+        print(frappe.get_traceback())
+        response_maker(
+            desc="Багшийн үнэлгээний жагсаалт авахад алдаа гарлаа.",
+            status=500,
+            type="error"
+        )
+
+
 @frappe.whitelist(methods=["POST"])
 def create_review(courseId = None, rating = None, reviewText = None):
     user = frappe.session.user

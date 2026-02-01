@@ -208,3 +208,31 @@ def change_password(old_password, new_password):
         )
         frappe.log_error(frappe.get_traceback(), "Change Password Error")
         return
+    
+@frappe.whitelist(methods=["GET"])
+def get_me():
+    user = frappe.session.user
+    roles = ["Student", "Instructor"]
+    if not frappe.db.exists("Has Role", {"parent": user, "role": ["in", roles]}):
+        response_maker(
+            desc="Нэвтрээгүй хэрэглэгч байна.",
+            status=401,
+            type="error"
+        )
+        return
+    try:
+        user_info = frappe.get_value("User", user, ["first_name", "last_name", "full_name", "user_image", "email"], as_dict=1)
+        response_maker(
+            desc="Хэрэглэгчийн мэдээлэл амжилттай авлаа.",
+            data=user_info
+        )
+        return
+    except:
+        frappe.log_error(frappe.get_traceback(), "Get me error")
+        print(frappe.get_traceback())
+        response_maker(
+            desc="Хэрэглэгчийн мэдээлэл авахад алдаа гарлаа.",
+            status=500,
+            type="error"
+        )
+        return

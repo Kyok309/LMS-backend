@@ -17,10 +17,13 @@ class Lesson(Document):
          }
       ):
          frappe.throw("Дарааллын тоо давхардаж болохгүй.")
+   
+   def before_save(self):
+      self.send_notification()
 	
    def on_update(self):
       self.serialize_lesson_content_order()
-         
+
    def on_trash(self):
       self.delete_quiz()
       self.delete_lesson_student()
@@ -81,3 +84,38 @@ class Lesson(Document):
    def delete_lesson_student(self):
       lesson_student = frappe.get_doc("Lesson_student", {"lesson": self.name})
       lesson_student.delete(ignore_permissions=True)
+
+   def send_notification(self):
+      enrolled_students = frappe.get_all("Enrollment", filters={"course": self.course}, fields=["student"])
+      course_title, instructor_name = frappe.get_value("Course", {"name": self.course}, ["course_title", "instructor"])
+      instructor = frappe.get_value("User", {"name": instructor_name}, "full_name")
+      if self.is_new():
+         for student in enrolled_students:
+            notification = frappe.get_doc({
+               "doctype": "Notification Log",
+               "subject": f"{instructor}",
+               "email_content": f"{course_title} сургалтанд {self.lesson_title} хичээл нэмэгдэж орлоо.",
+               "type": "Alert",
+               "for_user": student["student"],
+               "from_user": instructor_name,
+               "read": 0
+            })
+            notification.insert(ignore_permissions=True)
+            frappe.publish_realtime(f"notification_{student["student"]}",
+               message={"text": f"{course_title} сургалтанд {self.lesson_title} хичээл нэмэгдэж орлоо."}
+            )
+      else:
+         for student in enrolled_students:
+            notification = frappe.get_doc({
+               "doctype": "Notification Log",
+               "subject": f"{instructor}",
+               "email_content": f"{course_title} сургалтын {self.lesson_title} хичээлд өөрчлөлт орлоо.",
+               "type": "Alert",
+               "for_user": student["student"],
+               "from_user": instructor_name,
+               "read": 0
+            })
+            notification.insert(ignore_permissions=True)
+            frappe.publish_realtime(f"notification_{student["student"]}",
+               message={"text": f"{course_title} сургалтын {self.lesson_title} хичээлд өөрчлөлт орлоо."}
+            )

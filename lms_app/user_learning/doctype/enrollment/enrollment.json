@@ -12,7 +12,9 @@
   "progress_percentage",
   "average_score",
   "completion_status",
-  "completed_lessons"
+  "completed_lessons",
+  "completion_date",
+  "certificate_issued"
  ],
  "fields": [
   {
@@ -58,15 +60,27 @@
    "fieldname": "completed_lessons",
    "fieldtype": "Int",
    "label": "Completed Lessons"
+  },
+  {
+   "fieldname": "completion_date",
+   "fieldtype": "Date",
+   "label": "Completion Date"
+  },
+  {
+   "default": "0",
+   "fieldname": "certificate_issued",
+   "fieldtype": "Check",
+   "label": "Certificate Issued"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-01-16 14:52:27.438477",
+ "modified": "2026-01-29 17:16:04.452349",
  "modified_by": "Administrator",
  "module": "User Learning",
  "name": "Enrollment",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {

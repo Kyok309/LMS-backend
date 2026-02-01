@@ -47,6 +47,7 @@ class Lesson_student(Document):
 		final_scores = frappe.get_all("Lesson_student",
          filters={"lesson.course": course_name, "student": self.student, "final_score": ["!=", 0]},
          fields=["final_score"])
+		print(len(final_scores))
 		
 		# Average_score
 		average = sum(d.final_score for d in final_scores) / len(final_scores)

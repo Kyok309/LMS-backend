@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: white;
+        }
+
+        .certificate-container {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            background: white;
+        }
+
+        .certificate {
+            width: 1200px;
+            height: 950px;
+            border: 3px solid #d4af37;
+            padding: 60px 50px;
+            background: white;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .certificate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 1px solid #d4af37;
+            margin: 10px;
+            pointer-events: none;
+        }
+
+        .certificate-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header {
+            margin-bottom: 50px;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            background: #4A90E2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+        }
+
+        .certificate-title {
+            font-size: 36px;
+            letter-spacing: 3px;
+            color: #d4af37;
+            margin-bottom: 10px;
+            font-weight: normal;
+            text-transform: uppercase;
+        }
+
+        .certificate-text {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .student-name {
+            font-size: 48px;
+            color: #000;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .achievement-text {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .course-title {
+            font-size: 24px;
+            color: #000;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .signature-section {
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            margin-top: 40px;
+            padding-top: 60px;
+            padding-bottom: 60px;
+            border-top: 4px solid #ddd;
+        }
+
+        .signature-block {
+            text-align: center;
+            flex: 1;
+        }
+
+        .signature-line {
+            width: 180px;
+            height: 2px;
+            background: #333;
+            margin: 0 auto 5px;
+        }
+
+        .signature-name {
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .signature-title {
+            font-size: 18px;
+            color: #666;
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .shield-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 15px;
+            background: #f0e6d2;
+            color: #0aaaf1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .footer-text {
+            font-size: 16px;
+            color: #999;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="certificate-container">
+        <div class="certificate">
+            <div class="certificate-content">
+                <div>
+                    <div class="header">
+                        <div class="icon">🎓</div>
+                        <div class="certificate-title">Сертификат</div>
+                    </div>
+
+                    <div class="student-name">{{ student_name }}</div>
+
+                    <div class="course-title">{{ course_title }}</div>
+                    <div class="achievement-text">
+                        сургалтыг LMS системийн хүрээнд амжилттай дүүргэсэн тул энэхүү сертификатыг олгов.
+                    </div>
+                </div>
+
+                <div>
+                    <div class="signature-section">
+                        <div class="signature-block">
+                            <div class="signature-line"></div>
+                            <div class="signature-name">{{ instructor_name }}</div>
+                            <div class="signature-title">Багш</div>
+                        </div>
+
+                        <div class="signature-block">
+                            <div class="shield-icon">🛡️</div>
+                        </div>
+
+                        <div class="signature-block">
+                            <div class="signature-line"></div>
+                            <div class="signature-name">{{ student_name }}</div>
+                            <div class="signature-title">Суралцагч</div>
+                        </div>
+                    </div>
+
+                    <div class="footer-text">
+                        СЕРТИФИКАТ ID: {{ certificate_id}} • ОЛГОГДСОН: {{ completion_date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

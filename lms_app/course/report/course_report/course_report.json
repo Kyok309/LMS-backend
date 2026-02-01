@@ -1,0 +1,38 @@
+{
+ "add_total_row": 0,
+ "add_translate_data": 0,
+ "columns": [],
+ "creation": "2026-01-27 12:34:50.869231",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [],
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{}",
+ "letterhead": null,
+ "modified": "2026-01-27 12:34:50.869231",
+ "modified_by": "Administrator",
+ "module": "Course",
+ "name": "Course report",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Course",
+ "report_name": "Course report",
+ "report_type": "Report Builder",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Student"
+  },
+  {
+   "role": "Instructor"
+  },
+  {
+   "role": "Guest"
+  }
+ ],
+ "timeout": 0
+}

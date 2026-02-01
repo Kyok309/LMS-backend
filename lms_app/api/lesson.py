@@ -6,11 +6,8 @@ from frappe.query_builder import DocType
 @frappe.whitelist(methods=["POST"])
 def get_lesson_file(lesson_id, file_url):
     user = frappe.session.user
-    print(user)
-    print(file_url)
     # 1. Get lesson
     lesson = frappe.get_doc("Lesson", lesson_id)
-    print(lesson.course)
 
     # 2. Check enrollment
     if not check_enrollment(user, lesson.course):
@@ -58,8 +55,8 @@ def get_lessons():
         lessons = (
             frappe.qb
             .from_(Lesson)
-            .join(Lesson_student)
-            .on(Lesson.name == Lesson_student.lesson)
+            .left_join(Lesson_student)
+            .on((Lesson.name == Lesson_student.lesson) & (Lesson_student.student == user))
             .join(Course)
             .on(Lesson.course == Course.name)
             .select(
@@ -68,6 +65,7 @@ def get_lessons():
             .where(
                 Course.name == course_id
             )
+            .orderby(Lesson.order)
         ).run(as_dict = True)
         course_title = frappe.get_value("Course", course_id, "course_title")
         print(lessons)

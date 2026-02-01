@@ -20,12 +20,22 @@ class Course(Document):
             self.published_on = frappe.utils.nowdate()
         
     def on_update(self):
-        print("Notif about to publish")
-        frappe.publish_realtime("notification",
-            message={"text": "djks"}
-        )
-        frappe.db.commit() 
-        print("Notif published")
+        enrolled_students = frappe.get_all("Enrollment", filters={"course": self.name}, fields=["student"])
+        instructor = frappe.get_value("User", {"name": self.instructor}, "full_name")
+        for student in enrolled_students:
+            notification = frappe.get_doc({
+                "doctype": "Notification Log",
+                "subject": f"{instructor}",
+                "email_content": f"{self.course_title} сургалтанд өөрчлөлт орсон байна.",
+                "type": "Alert",
+                "for_user": student["student"],
+                "from_user": self.instructor,
+                "read": 0
+            })
+            notification.insert(ignore_permissions=True)
+            frappe.publish_realtime(f"notification_{student["student"]}",
+                message={"text": f"{self.course_title} сургалтын агуулгад өөрчлөлт орсон байна."}
+            )
     def validate(self):
         if not frappe.db.exists("Lesson", {"course": self.name}):
             self.status = "Draft"

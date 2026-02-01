@@ -1,5 +1,6 @@
 import frappe
 from lms_app.utils.utils import response_maker
+from frappe.model.workflow import apply_workflow
 
 @frappe.whitelist(allow_guest=True, methods=["GET"])
 def get_courses():
@@ -17,7 +18,7 @@ def get_courses():
         field, direction = sort_by.rsplit("_", 1)
         order_by = f"{field} {direction}"
         
-        filters = {"status": "Published", "price": ["between", [min_price, max_price]]}
+        filters = {"status": "Published", "price": ["between", [min_price, max_price]], "workflow_state": "Approved"}
         if level and level != "All":
             filters["level"] = level
             print(level)
@@ -386,7 +387,8 @@ def create_course():
             "learning_curve": learning_curve,
             "requirement": requirement,
             "price_type": price_type,
-            "price": price
+            "price": price,
+            "workflow_state": "Pending"
         })
         course.flags.ignore_mandatory = True
 
@@ -438,6 +440,8 @@ def update_course():
         }
 
         if user == course.instructor:
+            if course.workflow_state == "Approved" and course.status == "Published":
+                apply_workflow(course, "Review")
             update_data = {
                 k: v for k, v in data.items()
                 if k in ALLOWED_FIELDS

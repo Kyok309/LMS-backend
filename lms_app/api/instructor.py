@@ -1,5 +1,6 @@
 import frappe
 from lms_app.utils.utils import response_maker
+
 @frappe.whitelist(allow_guest=True, methods=["GET"])
 def get_instructor_profile():
     try:
@@ -15,7 +16,7 @@ def get_instructor_profile():
         instructor_user = frappe.get_value(
             "User",
             user,
-            ["email", "first_name", "last_name", "phone", "user_image", "bio"],
+            ["name", "email", "first_name", "last_name", "phone", "user_image", "bio"],
             as_dict=True
         )
         print(instructor_user)

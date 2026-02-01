@@ -14,12 +14,13 @@ class Quiz_submission(Document):
 		self.update_enrollment_completion_status()
   
 	def update_lesson_student_status(self):
+		user = frappe.session.user
 		if self.passed:
 			lesson_name = frappe.get_value("Quiz", self.quiz, "lesson")
-			lesson_student = frappe.get_doc("Lesson_student", {"lesson": lesson_name})
+			lesson_student = frappe.get_doc("Lesson_student", {"lesson": lesson_name, "student": user})
 			quiz = frappe.get_value("Quiz", {"lesson": lesson_name}, "name")
 			
-			if frappe.db.exists("Quiz_submission", {"quiz": quiz, "passed": 1}):
+			if frappe.db.exists("Quiz_submission", {"quiz": quiz, "student": user, "passed": 1}):
 				lesson_student.update({"status": "Done"})
 			else:
 				lesson_student.update({"status": "Open"})
@@ -35,6 +36,7 @@ class Quiz_submission(Document):
 				"score_percent",
 				order_by="score_percent desc"
 			)
+			print(highest_score)
 			lesson_student.update({
 				"final_score": highest_score or 0
 			})

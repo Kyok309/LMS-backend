@@ -1,5 +1,6 @@
 import frappe
 from lms_app.utils.utils import response_maker
+from frappe.query_builder import DocType
 
 def check_enrollment(student, course_id):
     return frappe.db.exists("Enrollment", {"student": student, "course": course_id})
@@ -24,24 +25,16 @@ def check_enrollment_api(courseId):
 def get_enrollments_student():
     user = frappe.session.user
     try:
-        enrollments = frappe.db.get_all(
-            "Enrollment",
-            filters={"student": user},
-            fields=["course", "creation", "progress_percentage", "completion_status", "average_score", "completed_lessons"]
-        )
-        enrollment_course_ids = [e["course"] for e in enrollments]
-        courses = frappe.db.get_all(
-            "Course",
-            filters={"name": ["in", enrollment_course_ids]},
-            fields=["name", "course_title", "description"]
-        )
+        Enrollment = DocType("Enrollment")
+        Course = DocType("Course")
 
-        courses_map = {c["name"]: c for c in courses}
-
-        for enrollment in enrollments:
-            course = courses_map.get(enrollment["course"])
-            enrollment["course_title"] = course["course_title"] if course else None
-            enrollment["course_description"] = course["description"] if course else None
+        enrollments = (frappe.qb
+            .from_(Enrollment)
+            .join(Course)
+            .on(Enrollment.course == Course.name)
+            .select(Enrollment.name, Enrollment.course, Enrollment.creation, Enrollment.progress_percentage, Enrollment.completion_status, Enrollment.average_score, Enrollment.completed_lessons, Enrollment.certificate_issued, Course.name, Course.course_title, Course.description)
+            .where(Enrollment.student == user)
+        ).run(as_dict=True)
 
         response_maker(
             desc="Бүртгэлүүдийг амжилттай авлаа.",
