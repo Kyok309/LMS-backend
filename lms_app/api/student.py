@@ -23,7 +23,7 @@ def get_student_profile():
             "last_name": student_user.last_name,
             "email": student_user.email,
             "phone": student_user.phone,
-            "profile": student_user.user_image
+            "user_image": student_user.user_image
         }
         response_maker(
             desc="Суралцагчийн профайлыг амжилттай авлаа.",

@@ -33,7 +33,7 @@ class Course(Document):
                 "read": 0
             })
             notification.insert(ignore_permissions=True)
-            frappe.publish_realtime(f"notification_{student["student"]}",
+            frappe.publish_realtime(f"notification_{student['student']}",
                 message={"text": f"{self.course_title} сургалтын агуулгад өөрчлөлт орсон байна."}
             )
     def validate(self):

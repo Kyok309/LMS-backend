@@ -111,7 +111,7 @@ def login():
         token_app = frappe.get_doc("OAuth Client", "3cvv8jgqe0")
         client_id = token_app.client_id
         client_secret = token_app.client_secret
-        get_token_url = "http://localhost:8000/api/method/frappe.integrations.oauth2.get_token"
+        get_token_url = f"{frappe.utils.get_url()}/api/method/frappe.integrations.oauth2.get_token"
         body = {
             "grant_type": "password",
             "client_id": client_id,

@@ -101,7 +101,7 @@ class Lesson(Document):
                "read": 0
             })
             notification.insert(ignore_permissions=True)
-            frappe.publish_realtime(f"notification_{student["student"]}",
+            frappe.publish_realtime(f"notification_{student['student']}",
                message={"text": f"{course_title} сургалтанд {self.lesson_title} хичээл нэмэгдэж орлоо."}
             )
       else:
@@ -116,6 +116,6 @@ class Lesson(Document):
                "read": 0
             })
             notification.insert(ignore_permissions=True)
-            frappe.publish_realtime(f"notification_{student["student"]}",
+            frappe.publish_realtime(f"notification_{student['student']}",
                message={"text": f"{course_title} сургалтын {self.lesson_title} хичээлд өөрчлөлт орлоо."}
             )
