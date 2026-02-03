@@ -66,7 +66,7 @@ class Lesson(Document):
          "Lesson",
          filters={"course": course},
          fields=["name"],
-         order_by="order asc, modified asc"
+         order_by="`order` asc, modified asc"
       )
 
       for index, lesson in enumerate(lessons, start=1):

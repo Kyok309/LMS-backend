@@ -110,7 +110,7 @@ def get_quiz_questions_instructor(quizId = None):
          "Quiz_question",
          filters={"quiz": quizId},
          fields=["name", "question_text", "order", "score"],
-         order_by="order asc"
+         order_by="`order` asc"
       )
       print(quiz_questions)
       response_maker(

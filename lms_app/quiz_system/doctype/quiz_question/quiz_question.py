@@ -24,7 +24,7 @@ class Quiz_question(Document):
 			"Quiz_question",
 			filters={"quiz": quiz},
 			fields=["name"],
-			order_by="order asc, modified asc"
+			order_by="`order` asc, modified asc"
 		)
 
 		for index, question in enumerate(questions, start=1):

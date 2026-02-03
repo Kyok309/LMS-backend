@@ -119,7 +119,7 @@ def get_lessons_instructor():
                 "Lesson",
                 filters={"course": course_id},
                 fields=["name", "lesson_title", "order"],
-                order_by="order asc"
+                order_by="`order` asc"
             )
             response_maker(
                 desc="Хичээлийн мэдээллийг амжилттай авлаа.",
@@ -133,9 +133,9 @@ def get_lessons_instructor():
                 type="error"
             )
             return
-        
+        return
     except:
-        frappe.log(frappe.get_traceback(), "Get courses instructor error")
+        frappe.log_error(frappe.get_traceback(), "Get courses instructor error")
         print(frappe.get_traceback())
         response_maker(
             desc="Хичээлийн мэдээлэл авахад алдаа гарлаа.",
@@ -225,8 +225,8 @@ def get_lesson_instructor():
         )
         return
     except Exception:
-        frappe.log_error(frappe.get_traceback, "Get lesson error")
-        print(frappe.get_traceback)
+        frappe.log_error(frappe.get_traceback(), "Get lesson error")
+        print(frappe.get_traceback())
         response_maker(
             desc="Хичээлийн мэдээлэл авахад алдаа гарлаа.",
             status=500,
