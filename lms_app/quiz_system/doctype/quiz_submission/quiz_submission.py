@@ -57,7 +57,7 @@ class Quiz_submission(Document):
 				JOIN `tabLesson` l ON l.name = q.lesson
 				WHERE l.course = %s
 			)
-		""", course)[0][0]
+		""", (course,))[0][0]
 		if has_submission:
 			enrollment = frappe.get_doc("Enrollment", {"course": course, "student": self.student})
 			enrollment.update({

@@ -23,17 +23,18 @@ class Course(Document):
         enrolled_students = frappe.get_all("Enrollment", filters={"course": self.name}, fields=["student"])
         instructor = frappe.get_value("User", {"name": self.instructor}, "full_name")
         for student in enrolled_students:
+            student_name = student["student"]
             notification = frappe.get_doc({
                 "doctype": "Notification Log",
-                "subject": f"{instructor}",
+                "subject": f"{instructor}{student_name}",
                 "email_content": f"{self.course_title} сургалтанд өөрчлөлт орсон байна.",
                 "type": "Alert",
-                "for_user": student["student"],
+                "for_user": student_name,
                 "from_user": self.instructor,
                 "read": 0
             })
             notification.insert(ignore_permissions=True)
-            frappe.publish_realtime(f"notification_{student['student']}",
+            frappe.publish_realtime(f"notification_{student_name}",
                 message={"text": f"{self.course_title} сургалтын агуулгад өөрчлөлт орсон байна."}
             )
     def validate(self):

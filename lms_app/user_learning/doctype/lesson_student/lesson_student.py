@@ -17,16 +17,30 @@ class Lesson_student(Document):
 		enrollment = frappe.get_doc("Enrollment", {"course": course_name, "student": self.student})
 
 		# Progress %
-		completed_lessons = frappe.get_all(
-			"Lesson_student",
-			filters={
-				"lesson.course": course_name,
-				"student": self.student,
-				"status": "Done"
-			},
-			fields=["name"]
+		completed_lessons = frappe.db.sql(
+			"""
+			SELECT ls.name
+			FROM `tabLesson_student` ls
+			INNER JOIN `tabLesson` l ON l.name = ls.lesson
+			WHERE l.course = %s
+				AND ls.student = %s
+				AND ls.status = %s
+			""",
+			(course_name, self.student, "Done"),
+			as_dict=True
 		)
-		total_lesson_student = frappe.db.count("Lesson_student", {"lesson.course": course_name, "student": self.student})
+
+		total_lesson_student = frappe.db.sql(
+			"""
+			SELECT COUNT(*)
+			FROM `tabLesson_student` ls
+			INNER JOIN `tabLesson` l ON l.name = ls.lesson
+			WHERE l.course = %s
+				AND ls.student = %s
+			""",
+			(course_name, self.student)
+		)[0][0]
+
 		progress = len(completed_lessons)/total_lesson_student * 100
 
 		# Completion_status -> Finished
@@ -44,11 +58,19 @@ class Lesson_student(Document):
 	
 	def calculate_average_score(self):
 		course_name = frappe.get_value("Lesson", self.lesson, "course")
-		final_scores = frappe.get_all("Lesson_student",
-         filters={"lesson.course": course_name, "student": self.student, "final_score": ["!=", 0]},
-         fields=["final_score"])
-		print(len(final_scores))
-		
+		final_scores = frappe.db.sql(
+			"""
+			SELECT ls.final_score
+			FROM `tabLesson_student` ls
+			INNER JOIN `tabLesson` l ON l.name = ls.lesson
+			WHERE l.course = %s
+				AND ls.student = %s
+				AND ls.final_score != 0
+			""",
+			(course_name, self.student),
+			as_dict=True
+		)
+
 		# Average_score
 		average = sum(d.final_score for d in final_scores) / len(final_scores)
 		frappe.db.set_value("Enrollment", {"course": course_name, "student": self.student}, "average_score", average)
