@@ -62,7 +62,7 @@ def get_quiz_instructor(quizId = None):
         quiz_questions = frappe.get_list(
             "Quiz_question",
             filters={"quiz": quizId},
-            fields=["question_text", "question_file", "order", "passing_score", "time_limit_minutes", "creation", "modified"]
+            fields=["question_text", "question_file", "order", "score", "creation", "modified"]
         )
         data= quiz
         data["quiz_questions"] = quiz_questions
